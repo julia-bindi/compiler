@@ -20,24 +20,23 @@ public class Tag {
         ASSIGN = 269,          // =
         EQ = 270,              // ==
         NOT = 271,             // !
-        NE = 272,              // !=
-        GRAETER = 273,         // >
+        NE = 272,              // <>
+        GREATER = 273,         // >
         GE = 274,              // >=
         LESS = 275,            // <
         LE = 276,              // <=
-        NAO_SEI = 277,         // <>
-        AND = 278,             // &&
-        OR = 279,              // ||
-        ADD = 280,             // +
-        SUB = 281,             // -
-        MULT = 282,            // *
-        DIV = 283,             // /
+        AND = 277,             // &&
+        OR = 278,              // ||
+        ADD = 279,             // +
+        SUB = 280,             // -
+        MULT = 281,            // *
+        DIV = 282,             // /
         //Symbols
-        OPEN_PAR = 284,        // (
-        CLOSE_PAR = 285,       // )
-        OPEN_CUR = 286,        // {
-        CLOSE_CUR = 287,       // }
+        OPEN_PAR = 283,        // (
+        CLOSE_PAR = 284,       // )
+        OPEN_CUR = 285,        // {
+        CLOSE_CUR = 286,       // }
+        SEMICOLON = 287,       // ;
         COLON = 288,           // ,
-        SEMICOLON = 289,       // ;
-        DOT = 290;             // .
+        DOT = 289;             // .
 }
