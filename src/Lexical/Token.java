@@ -6,6 +6,7 @@ public class Token {
     public Token (int t){
         tag = t;
     }
+    
     public String toString(){
         return "" + tag;
     }

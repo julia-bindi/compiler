@@ -38,5 +38,6 @@ public class Tag {
         CLOSE_CUR = 286,       // }
         SEMICOLON = 287,       // ;
         COLON = 288,           // ,
-        DOT = 289;             // .
+        DOT = 289,             // .
+        DOUBLE_QUOTES = 290;     // "
 }
