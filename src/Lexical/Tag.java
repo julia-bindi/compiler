@@ -1,5 +1,7 @@
 package Lexical;
 
+import java.util.List;
+
 public class Tag {
     public final static int
         //Keywords
@@ -39,5 +41,10 @@ public class Tag {
         SEMICOLON = 287,       // ;
         COLON = 288,           // ,
         DOT = 289,             // .
-        DOUBLE_QUOTES = 290;     // "
+        DOUBLE_QUOTES = 290,   // "
+        //Special
+        ID = 291,
+        EOF = 292,
+        NUMERIC = 293;
+
 }

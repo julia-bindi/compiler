@@ -1,5 +1,7 @@
 start
-
-    
-
+    /* teste comentario
+    multi linhas */
+    start = 13;
+    // teste comentario uma linha
+    end = 2;
 exit
