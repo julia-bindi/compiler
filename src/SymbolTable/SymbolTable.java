@@ -2,15 +2,17 @@ package SymbolTable;
 
 import java.util.HashMap;
 
+import Lexical.Token;
+
 public class SymbolTable {
 
-    private HashMap<String, Integer> table;
+    private HashMap<Token, Id> table;
     
     public SymbolTable() {
-        this.table = new HashMap<String, Integer>();
+        this.table = new HashMap<Token, Id>();
     }
 
-    public void put(String key, Integer value){
+    public void put(Token key, Id value){
         this.table.put(key, value);
     }
     
