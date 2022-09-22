@@ -45,6 +45,11 @@ public class Tag {
         //Special
         ID = 291,
         EOF = 292,
-        NUMERIC = 293;
-
+        NUMERIC = 293,
+        LITERAL = 294;
+    
+    final static String[] translationArray = {"START", "EXIT", "END", "INT", "FLOAT", "STRING", "IF", "THEN", "ELSE", "DO", "WHILE", "SCAN", "PRINT",
+                                              "ASSIGN", "EQ", "NOT", "NE", "GREATER", "GE", "LESS", "LE", "AND", "OR", "ADD", "SUB", "MULT", "DIV",
+                                              "OPEN_PAR", "CLOSE_PAR", "OPEN_CUR", "CLOSE_CUR", "SEMICOLON", "COLON", "DOT", "DOUBLE_QUOTES", "ID",
+                                              "EOF", "NUMERIC", "LITERAL"};
 }

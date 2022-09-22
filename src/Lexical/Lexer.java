@@ -62,10 +62,14 @@ public class Lexer {
                 prev_index = current_index;
                 current_scanning_line = file_scanner.readLine();
                 this.line++;
+                while(current_scanning_line != null && current_scanning_line.length() == 0) { // deal with empty lines
+                    current_scanning_line = file_scanner.readLine();
+                    this.line++;
+                }
                 if(current_scanning_line == null) {
                     this.ch = 3; // EOF
                 }
-                else{
+                else {
                     current_index = 0;
                     char result = current_scanning_line.charAt(current_index);
                     current_index++;
@@ -82,10 +86,18 @@ public class Lexer {
             prev_scanning_line = current_scanning_line;
             prev_index = current_index;
             current_scanning_line = file_scanner.readLine();
-            current_index = 0;
             this.line++;
+            while(current_scanning_line != null && current_scanning_line.length() == 0) { // deal with empty lines
+                current_scanning_line = file_scanner.readLine();
+                this.line++;
+                if(current_scanning_line == null) {
+                    break;
+                }
+            }
             if(current_scanning_line == null) {
                 this.ch = 3; // EOF
+            } else {
+                current_index = 0;
             }
         }
         catch(IOException ioex){
@@ -112,18 +124,19 @@ public class Lexer {
         }
     }
 
-    public Token getNextToken() {
+    public Token getNextToken() throws TokenBuildException {
 
         if(this.ch == 3)
             return new Token(Tag.EOF); //EOF, não continuar lendo
 
         this.nextChar();
-
-        // Ignorar espaços
-        while(this.ch == ' ')
-            this.nextChar();
         
         while(true){ // necessário para, no caso dos comentários, reler o prox token
+            
+            // Ignorar espaços
+            while(this.ch == ' ')
+                this.nextChar();
+
             switch(this.ch){
                 case ';':
                     return new Token(Tag.SEMICOLON);
@@ -141,8 +154,11 @@ public class Lexer {
                         continue;
                     }
                     if(this.nextChar('*')){ //comentário multilinha
-                        while(this.ch != '*' && !this.nextChar('/'))
+                        while(this.ch != '*' && !this.nextChar('/')){
+                            if(this.ch == 3) // EOF junto com comentario multilinha
+                                return new Token(Tag.EOF);
                             this.nextChar();
+                        }
                         this.nextChar(); // ignorar o '*' no final
                         this.nextChar(); // ignorar o '/' no final
                         continue;
@@ -159,9 +175,27 @@ public class Lexer {
                 case ',':
                     return new Token(Tag.COLON);
                 case '.':
+                    this.nextChar();
+                    if(Character.isDigit(this.ch)){ // Probable  float (ex.: .25)
+                        String value = "0.";
+                        while(Character.isDigit(this.ch)){
+                            value += this.ch;
+                            this.nextChar();
+                        }
+                        this.unRead();
+                        return new Numeric(Tag.NUMERIC, value);
+                    }
+                    this.unRead();
                     return new Token(Tag.DOT);
                 case '"':
-                    return new Token(Tag.DOUBLE_QUOTES);
+                    String literal = "\"";
+                    this.nextChar();
+                    while(this.ch != '"'){
+                        literal += this.ch;
+                        this.nextChar();
+                    }
+                    literal += "\"";
+                    return new Literal(Tag.LITERAL, literal);
                 case '=':
                     if(this.nextChar('='))
                         return new Token(Tag.EQ);
@@ -179,11 +213,11 @@ public class Lexer {
                 case '&':
                     if(this.nextChar('&'))
                         return new Token(Tag.AND);
-                    throw new IndexOutOfBoundsException(); // Tem que trocar por uma exceção certa, não sei qual
+                    throw new TokenBuildException(this.line);
                 case '|':
                     if(this.nextChar('|'))
-                    return new Token(Tag.OR);
-                    throw new IndexOutOfBoundsException(); // Tem que trocar por uma exceção certa, não sei qual
+                        return new Token(Tag.OR);
+                    throw new TokenBuildException(this.line);
                 case 3:
                     return new Token(Tag.EOF);
                 default:
@@ -196,8 +230,26 @@ public class Lexer {
                         }
                         this.unRead();
                         return ST.put(new Id(Tag.ID, lexem));
+                    }else if(Character.isDigit(this.ch)){ // Probable Int or Float
+                        String value = "" + this.ch;
+                        this.nextChar();
+                        while(Character.isDigit(this.ch)){
+                            value += this.ch;
+                            this.nextChar();
+                        }
+                        this.unRead();
+                        if(this.nextChar('.')){ // Probable float
+                            value += '.';
+                            this.nextChar();
+                            while(Character.isDigit(this.ch)){
+                                value += this.ch;
+                                this.nextChar();
+                            }
+                            this.unRead();
+                        }
+                        return new Numeric(Tag.NUMERIC, value);
                     }
-                return new Token(' ');
+                throw new TokenBuildException(this.line);
             }
         }
     }

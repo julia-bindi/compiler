@@ -10,7 +10,7 @@ public class Numeric extends Token {
     }
     
     public String toString(){
-        return "<" + tag + ", \"" + this.value + "\">";
+        return "<" + translatedTag + ", " + this.value + ">";
     }
 
 }

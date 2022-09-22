@@ -2,7 +2,7 @@ package Lexical;
 
 public class Id extends Token{
 
-    private String lexeme;
+    public String lexeme;
 
     public Id(int tag, String lexeme){
         super(tag);
@@ -10,7 +10,7 @@ public class Id extends Token{
     }
     
     public String toString(){
-        return "<" + tag + ", " + this.lexeme + ">";
+        return "<" + translatedTag + ", " + this.lexeme + ">";
     }
     
 }

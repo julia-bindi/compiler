@@ -8,12 +8,12 @@ import Lexical.Tag;
 
 public class SymbolTable {
 
-    private HashMap<Token, Integer> table; // Tabela guarda Id -> int (level)
+    private HashMap<Id, Integer> table; // Tabela guarda Id -> int (level)
     private int level;
 
     public SymbolTable() {
 
-        this.table = new HashMap<Token, Integer>();
+        this.table = new HashMap<Id, Integer>();
         this.level = 1;
 
         // Reserver words put
@@ -32,7 +32,7 @@ public class SymbolTable {
         this.put(new Id(Tag.PRINT, "print"));
     }
 
-    public Token put(Token key){
+    public Id put(Id key){
         if(!this.hasSymbol(key))
             this.table.put(key, this.level);
         return key;
@@ -42,8 +42,13 @@ public class SymbolTable {
         
     }
 
-    public Boolean hasSymbol(Token t){
-        return this.table.containsKey(t);
+    public Boolean hasSymbol(Id t){
+        for(Id key : table.keySet()){
+            if(key.lexeme.equals(t.lexeme)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void remove(){
