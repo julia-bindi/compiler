@@ -1,7 +1,5 @@
 package Lexical;
 
-import java.util.List;
-
 public class Tag {
     public final static int
         //Keywords

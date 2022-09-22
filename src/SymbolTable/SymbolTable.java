@@ -2,7 +2,6 @@ package SymbolTable;
 
 import java.util.HashMap;
 
-import Lexical.Token;
 import Lexical.Id;
 import Lexical.Tag;
 
@@ -34,12 +33,20 @@ public class SymbolTable {
 
     public Id put(Id key){
         if(!this.hasSymbol(key))
+        {
             this.table.put(key, this.level);
-        return key;
+            return key;
+        }
+        return this.get(key);
     }
     
-    public void get(){
-        
+    public Id get(Id t){
+        for(Id key : table.keySet()){
+            if(key.lexeme.equals(t.lexeme)){
+                return key;
+            }
+        }
+        return new Id(0, ""); // Error
     }
 
     public Boolean hasSymbol(Id t){

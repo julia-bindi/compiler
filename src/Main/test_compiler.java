@@ -10,7 +10,7 @@ public class test_compiler {
     public static void main(String[] args) {
 
         SymbolTable ST = new SymbolTable();
-        Lexer lexical = new Lexer("D:\\Pastas\\EAD\\2022.2\\Compiladores\\compiler\\tests\\test5.txt", ST);
+        Lexer lexical = new Lexer("C:\\Users\\Arthur\\Desktop\\Cefet\\2022.2\\Compiladores\\compiler\\tests\\test5.txt", ST);
                             
         try {      
 
