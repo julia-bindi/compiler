@@ -5,12 +5,15 @@ import Lexical.Token;
 import Lexical.TokenBuildException;
 import SymbolTable.SymbolTable;
 
+import java.io.File;
+
 public class test_compiler {
     
     public static void main(String[] args) {
 
         SymbolTable ST = new SymbolTable();
-        Lexer lexical = new Lexer("C:\\Users\\Arthur\\Desktop\\Cefet\\2022.2\\Compiladores\\compiler\\tests\\test5.txt", ST);
+        String projectPath = new File("").getAbsolutePath();
+        Lexer lexical = new Lexer(projectPath.concat("\\tests\\test5.txt"), ST);
                             
         try {      
 
