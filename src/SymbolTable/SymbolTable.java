@@ -31,35 +31,41 @@ public class SymbolTable {
         this.put(new Id(Tag.PRINT, "print"));
     }
 
-    public Id put(Id key){
-        if(!this.hasSymbol(key))
-        {
+    public Id put(Id key) {
+        if (!this.hasSymbol(key)) {
             this.table.put(key, this.level);
             return key;
         }
         return this.get(key);
     }
-    
-    public Id get(Id t){
-        for(Id key : table.keySet()){
-            if(key.lexeme.equals(t.lexeme)){
+
+    public Id get(Id t) {
+        for (Id key : table.keySet()) {
+            if (key.lexeme.equals(t.lexeme)) {
                 return key;
             }
         }
         return new Id(0, ""); // Error
     }
 
-    public Boolean hasSymbol(Id t){
-        for(Id key : table.keySet()){
-            if(key.lexeme.equals(t.lexeme)){
+    public Boolean hasSymbol(Id t) {
+        for (Id key : table.keySet()) {
+            if (key.lexeme.equals(t.lexeme)) {
                 return true;
             }
         }
         return false;
     }
 
-    public void remove(){
+    public void remove() {
 
     }
 
+    public void printTable() {
+        System.out.println("\n\n************************\n\n");
+        System.out.println("Symbol Table:");
+        for (Id key : this.table.keySet()) {
+            System.out.println(key.lexeme);
+        }
+    }
 }
