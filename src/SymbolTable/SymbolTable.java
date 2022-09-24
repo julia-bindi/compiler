@@ -62,8 +62,6 @@ public class SymbolTable {
     }
 
     public void printTable() {
-        System.out.println();
-        System.out.println();
         System.out.println("SYMBOL TABLE");
         for (Id key : this.table.keySet()) {
             System.out.println(key.lexeme);
