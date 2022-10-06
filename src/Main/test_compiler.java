@@ -1,11 +1,7 @@
 package Main;
 
-import Lexical.Lexer;
-import Lexical.Token;
-import Lexical.TokenBuildException;
-import SymbolTable.SymbolTable;
+import Compile.Compiler;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class test_compiler {
@@ -19,6 +15,7 @@ public class test_compiler {
         test_compiler.optionsToCompile.add("Test 5");
         test_compiler.optionsToCompile.add("Test 6");
         test_compiler.optionsToCompile.add("Test 2 with fix 1");
+        test_compiler.optionsToCompile.add("Test 3 with fix 1");
         test_compiler.optionsToCompile.add("Test 4 with fix 1");
         test_compiler.optionsToCompile.add("Test 4 with fix 2");
         test_compiler.optionsToCompile.add("All tests");
@@ -32,25 +29,11 @@ public class test_compiler {
     }
 
     public static void compileOneFileTest(String filename) {
-        SymbolTable ST = new SymbolTable();
-        String projectPath = new File("").getAbsolutePath();
-        Lexer lexical = new Lexer(projectPath.concat("/tests/" + filename + ".txt"), ST);
 
+        Compiler comp = new Compiler(filename, "syntatical");
         System.out.println("--- Testando o arquivo " + filename + " ---\n");
 
-        try {
-            Token t;
-            System.out.println("TOKENS");
-            do {
-                t = lexical.getNextToken();
-                System.out.println(t.toString());
-            } while (t.tag != 292);
-            System.out.println("Info: Lexer test ended!\n");
-        } catch (TokenBuildException tbe) {
-            System.out.println(tbe.getMessage() + "\n");
-        }
-
-        ST.printTable();
+        comp.executeCompile();
     }
 
     public static void main(String[] args) {

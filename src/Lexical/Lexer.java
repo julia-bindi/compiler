@@ -7,17 +7,12 @@ import java.io.IOException;
 
 import SymbolTable.SymbolTable;
 
-// Falta ler os numéricos, salvar na classe Numeric
-// Não ta identificando Strings, elas são pegas como aspas, Id e aspas
-// Fazer um jeito no método de printar os tokens pra printar o nome ao inves do int, melhora a visualização
-// Tem que ignorar os espaços, menos quando é string, alguns são ignorados mas alguns ainda estão passando  
-
 public class Lexer {
 
     public SymbolTable ST;
 
     // Compiler info variables
-    private int line; // Current line in the analysis file
+    public int line; // Current line in the analysis file
     private char ch; // Current character read
 
     // Scanning variables
@@ -156,7 +151,8 @@ public class Lexer {
                     if(this.nextChar('*')){ //comentário multilinha
                         while(this.ch != '*' && !this.nextChar('/')){
                             if(this.ch == 3) // EOF junto com comentario multilinha
-                                return new Token(Tag.EOF);
+                                throw new TokenBuildException(this.line, 
+                                                              "Multiline Comment Not Closed");
                             this.nextChar();
                         }
                         this.nextChar(); // ignorar o '*' no final
