@@ -6,7 +6,7 @@
   pontuacaoMaxima = 100;
 
   /* Entrada de dados
-     Verifica aprovação de candidatos
+     Verifica aprovação de candidatos /*
   do
     print("Pontuacao Candidato: ");
     scan(pontuacao);

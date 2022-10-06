@@ -164,10 +164,6 @@ public class Lexer {
                     return new Token(Tag.OPEN_PAR);
                 case ')':
                     return new Token(Tag.CLOSE_PAR);
-                case '{':
-                    return new Token(Tag.OPEN_CUR);
-                case '}':
-                    return new Token(Tag.CLOSE_CUR);
                 case ',':
                     return new Token(Tag.COLON);
                 case '.':
@@ -183,14 +179,14 @@ public class Lexer {
                     }
                     this.unRead();
                     return new Token(Tag.DOT);
-                case '"':
-                    String literal = "\"";
+                case '{':
+                    String literal = "{";
                     this.nextChar();
-                    while(this.ch != '"'){
+                    while(this.ch != '}'){
                         literal += this.ch;
                         this.nextChar();
                     }
-                    literal += "\"";
+                    literal += "}";
                     return new Literal(Tag.LITERAL, literal);
                 case '=':
                     if(this.nextChar('='))

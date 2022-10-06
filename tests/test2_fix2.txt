@@ -1,5 +1,5 @@
 start
-  int: a, c_;
+  int a, c_;
   float d, _e;
   
   a = 0; d = 3.5
