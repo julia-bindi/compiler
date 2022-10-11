@@ -15,6 +15,10 @@ public class test_compiler {
         test_compiler.optionsToCompile.add("Test 5");
         test_compiler.optionsToCompile.add("Test 6");
         test_compiler.optionsToCompile.add("Test 1 with fix 1");
+        test_compiler.optionsToCompile.add("Test 1 with fix 2");
+        test_compiler.optionsToCompile.add("Test 1 with fix 3");
+        test_compiler.optionsToCompile.add("Test 1 with fix 4");
+        test_compiler.optionsToCompile.add("Test 1 with fix 5");
         test_compiler.optionsToCompile.add("Test 2 with fix 1");
         test_compiler.optionsToCompile.add("Test 2 with fix 2");
         test_compiler.optionsToCompile.add("Test 3 with fix 1");

@@ -26,7 +26,7 @@ public class Syntatic {
 
     private void error(){
         // Implementar melhor o erro depois
-        System.out.println("Erro na linha " + this.lexical.line);
+        throw new Error();
     }
 
     private void eat(int toEat){
@@ -42,7 +42,8 @@ public class Syntatic {
     private void program(){
         this.eat(Tag.START);
         switch(this.t.tag){
-            case Tag.NUMERIC:
+            case Tag.INT:
+            case Tag.FLOAT:
             case Tag.STRING:
                 this.declList();
                 break;
@@ -144,6 +145,7 @@ public class Syntatic {
             case Tag.NUMERIC:
             case Tag.LITERAL:
                 this.simpleExpr();
+                break;
             default:
                 this.error();
         }

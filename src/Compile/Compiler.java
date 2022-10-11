@@ -47,7 +47,12 @@ public class Compiler {
 
             ST.printTable();
         }else if(option=="syntatical"){
-            this.syntatical.executeSyntatical();
+            try {
+                this.syntatical.executeSyntatical();
+            } catch (Error e) {
+                System.out.println("Erro na linha " + this.lexical.line);
+            }
+            System.out.println("Se nenhum erro foi printado, a análise léxica foi concluída!");
         }
 
     }
