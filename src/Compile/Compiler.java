@@ -52,7 +52,10 @@ public class Compiler {
             } catch (Error e) {
                 System.out.println("Erro na linha " + this.lexical.line);
             }
-            System.out.println("Se nenhum erro foi printado, a análise léxica foi concluída!");
+            if(this.syntatical.error)
+                System.out.println("Análise falhou, erro encontrado");
+            else
+                System.out.println("Análise léxica concluída!");
         }
 
     }

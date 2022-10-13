@@ -10,9 +10,12 @@ public class Syntatic {
 
     private Lexer lexical;
     private Token t;
+
+    public Boolean error;
     
     public Syntatic(Lexer l){
         this.lexical = l;
+        this.error = false;
         this.nextToken();
     };
 
@@ -24,9 +27,20 @@ public class Syntatic {
         }
     }
 
+    private void error(int tok){
+        // Implementar melhor o erro depois
+        this.error = true;
+        System.out.println("Erro na linha " + this.lexical.line + ", token esperado: " + Tag.translationArray[tok-256] +
+                           " | token encontrado: " + this.t.translatedTag);
+        if(tok!=Tag.EOF)
+            this.nextToken();
+    }
+    
     private void error(){
         // Implementar melhor o erro depois
-        throw new Error();
+        this.error = true;
+        if(this.t.tag!=Tag.EOF)
+            this.nextToken();
     }
 
     private void eat(int toEat){
@@ -35,7 +49,7 @@ public class Syntatic {
             if(toEat!=Tag.EOF)
                 this.nextToken();
         } else {
-            this.error();
+            this.error(toEat);
         }
     };
 
@@ -160,27 +174,27 @@ public class Syntatic {
         switch(this.t.tag){
             case Tag.EQ:
                 this.eat(Tag.EQ);
-                this.simpleExpr();
+                this.expression();
                 break;
             case Tag.GREATER:
                 this.eat(Tag.GREATER);
-                this.simpleExpr();
+                this.expression();
                 break;
             case Tag.GE:
                 this.eat(Tag.GE);
-                this.simpleExpr();
+                this.expression();
                 break;
             case Tag.LESS:
                 this.eat(Tag.LESS);
-                this.simpleExpr();
+                this.expression();
                 break;
             case Tag.LE:
                 this.eat(Tag.LE);
-                this.simpleExpr();
+                this.expression();
                 break;
             case Tag.NE:
                 this.eat(Tag.NE);
-                this.simpleExpr();
+                this.expression();
                 break;
             default: //lambda
                 break;
@@ -196,15 +210,15 @@ public class Syntatic {
         switch(this.t.tag){
             case Tag.ADD:
                 this.eat(Tag.ADD);
-                this.term();
+                this.simpleExpr();
                 break;
             case Tag.SUB:
                 this.eat(Tag.SUB);
-                this.term();
+                this.simpleExpr();
                 break;
             case Tag.OR:
                 this.eat(Tag.OR);
-                this.term();
+                this.simpleExpr();
                 break;
             default: //lambda
                 break;
