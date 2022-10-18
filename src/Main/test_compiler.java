@@ -32,7 +32,11 @@ public class test_compiler {
         test_compiler.optionsToCompile.add("Test 3 with fix 5");
         test_compiler.optionsToCompile.add("Test 4 with fix 1");
         test_compiler.optionsToCompile.add("Test 4 with fix 2");
+        test_compiler.optionsToCompile.add("Test 4 with fix 3");
+        test_compiler.optionsToCompile.add("Test 4 with fix 4");
+        test_compiler.optionsToCompile.add("Test 4 with fix 5");
         test_compiler.optionsToCompile.add("Test 5 with fix 1");
+        test_compiler.optionsToCompile.add("Test 5 with fix 2");
         test_compiler.optionsToCompile.add("All tests");
     }
 

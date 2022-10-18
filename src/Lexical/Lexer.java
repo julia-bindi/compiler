@@ -14,6 +14,7 @@ public class Lexer {
     // Compiler info variables
     public int line; // Current line in the analysis file
     private char ch; // Current character read
+    private Boolean sameLine;
 
     // Scanning variables
     private String file_path;
@@ -28,6 +29,7 @@ public class Lexer {
 
         this.line = 1;
         this.ch = ' ';
+        this.sameLine = true;
 
         this.ST = ST;
 
@@ -216,26 +218,31 @@ public class Lexer {
                     if(Character.isLetter(this.ch) || this.ch == '_'){ // probable Id
                         String lexem = "" + this.ch;
                         this.nextChar();
-                        while(Character.isLetterOrDigit(this.ch)){
+                        int beginLine = this.line, endLine = this.line; //Fix multiline var
+                        while(Character.isLetterOrDigit(this.ch) && beginLine == endLine){
                             lexem += this.ch;
                             this.nextChar();
+                            endLine = this.line;
                         }
                         this.unRead();
                         return ST.put(new Id(Tag.ID, lexem));
                     }else if(Character.isDigit(this.ch)){ // Probable Int or Float
                         String value = "" + this.ch;
                         this.nextChar();
-                        while(Character.isDigit(this.ch)){
+                        int beginLine = this.line, endLine = this.line; //Fix multiline var
+                        while(Character.isDigit(this.ch) && beginLine == endLine){
                             value += this.ch;
                             this.nextChar();
+                            endLine = this.line;
                         }
                         this.unRead();
                         if(this.nextChar('.')){ // Probable float
                             value += '.';
                             this.nextChar();
-                            while(Character.isDigit(this.ch)){
+                            while(Character.isDigit(this.ch) && beginLine == endLine){
                                 value += this.ch;
                                 this.nextChar();
+                                endLine = this.line;
                             }
                             this.unRead();
                         }
