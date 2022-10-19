@@ -23,7 +23,7 @@ public class Compiler {
         this.option = option;
         
         String projectPath = new File("").getAbsolutePath();
-        this.lexical = new Lexer(projectPath.concat("/tests/" + file + ".txt"), ST);
+        this.lexical = new Lexer(projectPath.concat("/tests/" + file), ST);
 
         this.syntatical = new Syntatic(this.lexical);
         
