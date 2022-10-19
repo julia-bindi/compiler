@@ -2,41 +2,27 @@ package Main;
 
 import Compile.Compiler;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class test_compiler {
     public final static ArrayList<String> optionsToCompile = new ArrayList<String>(7);
 
     public static void fillHowToCompile() {
-        test_compiler.optionsToCompile.add("Test 1");
-        test_compiler.optionsToCompile.add("Test 2");
-        test_compiler.optionsToCompile.add("Test 3");
-        test_compiler.optionsToCompile.add("Test 4");
-        test_compiler.optionsToCompile.add("Test 5");
-        test_compiler.optionsToCompile.add("Test 6");
-        test_compiler.optionsToCompile.add("Test 1 with fix 1");
-        test_compiler.optionsToCompile.add("Test 1 with fix 2");
-        test_compiler.optionsToCompile.add("Test 1 with fix 3");
-        test_compiler.optionsToCompile.add("Test 1 with fix 4");
-        test_compiler.optionsToCompile.add("Test 1 with fix 5");
-        test_compiler.optionsToCompile.add("Test 2 with fix 1");
-        test_compiler.optionsToCompile.add("Test 2 with fix 2");
-        test_compiler.optionsToCompile.add("Test 2 with fix 3");
-        test_compiler.optionsToCompile.add("Test 2 with fix 4");
-        test_compiler.optionsToCompile.add("Test 2 with fix 5");
-        test_compiler.optionsToCompile.add("Test 2 with fix 6");
-        test_compiler.optionsToCompile.add("Test 3 with fix 1");
-        test_compiler.optionsToCompile.add("Test 3 with fix 2");
-        test_compiler.optionsToCompile.add("Test 3 with fix 3");
-        test_compiler.optionsToCompile.add("Test 3 with fix 4");
-        test_compiler.optionsToCompile.add("Test 3 with fix 5");
-        test_compiler.optionsToCompile.add("Test 4 with fix 1");
-        test_compiler.optionsToCompile.add("Test 4 with fix 2");
-        test_compiler.optionsToCompile.add("Test 4 with fix 3");
-        test_compiler.optionsToCompile.add("Test 4 with fix 4");
-        test_compiler.optionsToCompile.add("Test 4 with fix 5");
-        test_compiler.optionsToCompile.add("Test 5 with fix 1");
-        test_compiler.optionsToCompile.add("Test 5 with fix 2");
+        File folder = new File("./tests");
+        File[] tests = folder.listFiles();
+        for(int i = 0; i < tests.length; i++){
+            String test = tests[i].getName();
+            if(!test.contains("fix")) {
+                test_compiler.optionsToCompile.add("Test " + test.charAt(4));
+            } else {
+                if(test.charAt(10) == '.') // enable fixes beyound 10
+                    test_compiler.optionsToCompile.add("Test " + test.charAt(4) + " with fix " + test.charAt(9));
+                else
+                    test_compiler.optionsToCompile.add("Test " + test.charAt(4) + " with fix " + test.charAt(9) + test.charAt(10));
+            }
+            System.out.println(tests[i].getName());
+        }
         test_compiler.optionsToCompile.add("All tests");
     }
 
