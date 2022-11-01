@@ -169,17 +169,6 @@ public class Lexer {
                 case ',':
                     return new Token(Tag.COLON);
                 case '.':
-                    this.nextChar();
-                    if(Character.isDigit(this.ch)){ // Probable  float (ex.: .25)
-                        String value = "0.";
-                        while(Character.isDigit(this.ch)){
-                            value += this.ch;
-                            this.nextChar();
-                        }
-                        this.unRead();
-                        return new Numeric(Tag.NUMERIC, value);
-                    }
-                    this.unRead();
                     return new Token(Tag.DOT);
                 case '{':
                     String literal = "{";
