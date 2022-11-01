@@ -14,7 +14,6 @@ public class Lexer {
     // Compiler info variables
     public int line; // Current line in the analysis file
     private char ch; // Current character read
-    private Boolean sameLine;
 
     // Scanning variables
     private String file_path;
@@ -29,7 +28,6 @@ public class Lexer {
 
         this.line = 1;
         this.ch = ' ';
-        this.sameLine = true;
 
         this.ST = ST;
 
