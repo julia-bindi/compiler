@@ -1,8 +1,9 @@
 start
-    /* teste comentario
-    multi linhas */
-    start = 13;
-    // teste comentario uma linha
-    end = .5; . "teste literal 801273!@#!@"
+    int a;
+    do
+        print({insira um valor maior que 0});
+        scan(a);
+        print({Valor inserido: });
+        print(a);
+    while(a > 0) end
 exit
-//
