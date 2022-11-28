@@ -15,42 +15,42 @@ public class SymbolTable {
         this.table = new HashMap<Id, Integer>();
         this.level = 1;
 
-        // Reserver words put
-        this.put(new Id(Tag.START, "start"));
-        this.put(new Id(Tag.EXIT, "exit"));
-        this.put(new Id(Tag.END, "end"));
-        this.put(new Id(Tag.INT, "int"));
-        this.put(new Id(Tag.FLOAT, "float"));
-        this.put(new Id(Tag.STRING, "string"));
-        this.put(new Id(Tag.IF, "if"));
-        this.put(new Id(Tag.THEN, "then"));
-        this.put(new Id(Tag.ELSE, "else"));
-        this.put(new Id(Tag.DO, "do"));
-        this.put(new Id(Tag.WHILE, "while"));
-        this.put(new Id(Tag.SCAN, "scan"));
-        this.put(new Id(Tag.PRINT, "print"));
+        // Reserved words put
+        this.put(new Id(Tag.START, "start", Types.VOID));
+        this.put(new Id(Tag.EXIT, "exit", Types.VOID));
+        this.put(new Id(Tag.END, "end", Types.VOID));
+        this.put(new Id(Tag.INT, "int", Types.VOID));
+        this.put(new Id(Tag.FLOAT, "float", Types.VOID));
+        this.put(new Id(Tag.STRING, "string", Types.VOID));
+        this.put(new Id(Tag.IF, "if", Types.VOID));
+        this.put(new Id(Tag.THEN, "then", Types.VOID));
+        this.put(new Id(Tag.ELSE, "else", Types.VOID));
+        this.put(new Id(Tag.DO, "do", Types.VOID));
+        this.put(new Id(Tag.WHILE, "while", Types.VOID));
+        this.put(new Id(Tag.SCAN, "scan", Types.VOID));
+        this.put(new Id(Tag.PRINT, "print", Types.VOID));
     }
 
     public Id put(Id key) {
-        if (!this.hasSymbol(key)) {
+        if (!this.hasSymbol(key.lexeme)) {
             this.table.put(key, this.level);
             return key;
         }
-        return this.get(key);
+        return this.get(key.getLexeme());
     }
 
-    public Id get(Id t) {
+    public Id get(String lexeme) {
         for (Id key : table.keySet()) {
-            if (key.lexeme.equals(t.lexeme)) {
+            if(key.lexeme.equals(lexeme)) {
                 return key;
             }
         }
-        return new Id(0, ""); // Error
+        return new Id(0, "", Types.ERROR); // Error
     }
 
-    public Boolean hasSymbol(Id t) {
+    public Boolean hasSymbol(String lexeme) {
         for (Id key : table.keySet()) {
-            if (key.lexeme.equals(t.lexeme)) {
+            if (key.lexeme.equals(lexeme)) {
                 return true;
             }
         }

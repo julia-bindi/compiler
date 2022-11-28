@@ -16,4 +16,12 @@ public class Token {
     public String toString(){
         return "<" + translatedTag + ">";
     }
+
+    public String getLexeme(){
+        return "ERROR";
+    }
+
+    public String getValue(){
+        return "ERROR";
+    }
 }

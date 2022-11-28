@@ -1,20 +1,26 @@
 package Syntatical;
 
 import Lexical.Tag;
-
 import Lexical.Lexer;
 import Lexical.Token;
 import Lexical.TokenBuildException;
 
+import SymbolTable.SymbolTable;
+import SymbolTable.Types;
+
 public class Syntatic {
 
     private Lexer lexical;
+    private SymbolTable ST;
+
     private Token t;
 
     public Boolean error;
     
-    public Syntatic(Lexer l){
+    public Syntatic(Lexer l, SymbolTable ST){
         this.lexical = l;
+        this.ST = ST;
+
         this.error = false;
         this.nextToken();
     };
@@ -53,7 +59,7 @@ public class Syntatic {
         }
     };
 
-    private void program(){
+    private void program()throws Exception{
         // program -> start [decl-list] stmt-list exit
         this.eat(Tag.START);
         switch(this.t.tag){
@@ -68,7 +74,7 @@ public class Syntatic {
         this.eat(Tag.EOF);
     }
 
-    private void stmtList(){
+    private void stmtList() throws Exception{
         // stmt-list -> stmt {stmt}
         do{
             this.stmt();
@@ -79,7 +85,7 @@ public class Syntatic {
                 this.t.tag == Tag.PRINT);
     }
 
-    private void stmt(){
+    private void stmt() throws Exception{
         switch(this.t.tag){
             // stmt -> assign-stmt ;
             case Tag.ID:
@@ -109,14 +115,14 @@ public class Syntatic {
         }
     }
 
-    private void assignStmt(){
+    private void assignStmt() throws Exception{
         // assign-stmt -> identifier = simple-expr
         this.eat(Tag.ID);
         this.eat(Tag.ASSIGN);
         this.simpleExpr();
     }
 
-    private void ifStmt(){
+    private void ifStmt() throws Exception{
         // if-stmt -> if condition then stmt-list [else stmt-list] end
         this.eat(Tag.IF);
         this.condition();
@@ -129,26 +135,28 @@ public class Syntatic {
         this.eat(Tag.END);
     }
 
-    private void condition(){
+    private void condition() throws Exception{
         // condition -> expression
-        this.expression();
+        Types t = this.expression();
+        if(t != Types.BOOLEAN)
+            throw new SemanticException(t, Types.BOOLEAN);
     }
 
-    private void whileStmt(){
+    private void whileStmt() throws Exception{
         // while-stmt -> do stmt-list stmt-sufix
         this.eat(Tag.DO);
         this.stmtList();
         this.stmtSufix();
     }
 
-    private void stmtSufix(){
+    private void stmtSufix() throws Exception{
         // stmt-sufix -> while condition end
         this.eat(Tag.WHILE);
         this.condition();
         this.eat(Tag.END);
     }
 
-    private void readStmt(){
+    private void readStmt() throws Exception{
         // read-stmt -> scan ( identifier )
         this.eat(Tag.SCAN);
         this.eat(Tag.OPEN_PAR);
@@ -156,7 +164,7 @@ public class Syntatic {
         this.eat(Tag.CLOSE_PAR);
     }
 
-    private void writeStmt(){
+    private void writeStmt() throws Exception{
         // write-stmt -> print ( writable )
         this.eat(Tag.PRINT);
         this.eat(Tag.OPEN_PAR);
@@ -164,7 +172,7 @@ public class Syntatic {
         this.eat(Tag.CLOSE_PAR);
     }
 
-    private void writable(){
+    private void writable() throws Exception{
         // writable -> simple-expr
         switch(this.t.tag){
             case Tag.NOT:
@@ -180,148 +188,187 @@ public class Syntatic {
         }
     }
 
-    private void expression(){
+    private Types expression() throws Exception{
         // expressin -> simple-expr expression-aux
-        this.simpleExpr();
-        this.expressionAux();
+        Types t = this.simpleExpr();
+        return this.expressionAux(t);
     }
 
-    private void expressionAux(){
+    private Types expressionAux(Types t) throws Exception{
         // expression-aux -> [relop expression]
         switch(this.t.tag){
             case Tag.EQ:
                 this.eat(Tag.EQ);
                 this.expression();
-                break;
+                return Types.BOOLEAN;
             case Tag.GREATER:
                 this.eat(Tag.GREATER);
                 this.expression();
-                break;
+                return Types.BOOLEAN;
             case Tag.GE:
                 this.eat(Tag.GE);
                 this.expression();
-                break;
+                return Types.BOOLEAN;
             case Tag.LESS:
                 this.eat(Tag.LESS);
                 this.expression();
-                break;
+                return Types.BOOLEAN;
             case Tag.LE:
                 this.eat(Tag.LE);
                 this.expression();
-                break;
+                return Types.BOOLEAN;
             case Tag.NE:
                 this.eat(Tag.NE);
                 this.expression();
-                break;
+                return Types.BOOLEAN;
             // expression-aux -> lambda
             default:
-                break;
+                return t;
         }
     }
 
-    private void simpleExpr(){
+    private Types simpleExpr() throws Exception{
         // simple-expr -> term simple-expr-aux
-        this.term();
-        this.simpleExprAux();
+        Types t = this.term();
+        return this.simpleExprAux(t);
     }
 
-    private void simpleExprAux(){
+    private Types simpleExprAux(Types t) throws Exception{
         // simple-expr-aux -> [addop simple-expr]
         switch(this.t.tag){
             case Tag.ADD:
+                if(!(t.equals(Types.INT) || t.equals(Types.FLOAT)))
+                    throw new SemanticException(t, Types.NUMERIC);
                 this.eat(Tag.ADD);
-                this.simpleExpr();
-                break;
+                Types t1 = this.simpleExpr();
+                if(!(t1.equals(Types.INT) || t1.equals(Types.FLOAT)))
+                    throw new SemanticException(t, Types.NUMERIC);
+                return t1;
             case Tag.SUB:
+                if(!(t.equals(Types.INT) || t.equals(Types.FLOAT)))
+                    throw new SemanticException(t, Types.NUMERIC);
                 this.eat(Tag.SUB);
-                this.simpleExpr();
-                break;
+                Types t2 = this.simpleExpr();
+                if(!(t2.equals(Types.INT) || t2.equals(Types.FLOAT)))
+                    throw new SemanticException(t, Types.NUMERIC);
+                return t2;
             case Tag.OR:
+                if(!t.equals(Types.BOOLEAN))
+                    throw new SemanticException(t, Types.BOOLEAN);
                 this.eat(Tag.OR);
-                this.simpleExpr();
-                break;
+                Types t3 = this.simpleExpr();
+                if(!t3.equals(Types.BOOLEAN))
+                    throw new SemanticException(t, Types.BOOLEAN);
+                return t3;
             // simple-expr-aux -> lambda
             default:
-                break;
+                return t;
         }
     }
 
-    private void term(){
+    private Types term() throws Exception{
         // term -> dactor-a term-aux
-        this.factorA();
-        this.termAux();
+        Types t = this.factorA();
+        return this.termAux(t);
     }
 
-    private void termAux(){
+    private Types termAux(Types t) throws Exception{
         // term-aux -> [mulop term]
         switch(this.t.tag){
             case Tag.MULT:
                 this.eat(Tag.MULT);
-                this.term();
-                break;
+                Types t1 = this.term();
+                if(!(t == t1 && (t == Types.INT || t == Types.FLOAT)))
+                    throw new SemanticException(t1, Types.NUMERIC);
+                return t1;
             case Tag.DIV:
                 this.eat(Tag.DIV);
-                this.term();
-                break;
+                Types t2 = this.term();
+                if(!(t == t2 && (t == Types.INT || t == Types.FLOAT)))
+                    throw new SemanticException(t2, Types.NUMERIC);
+                return Types.FLOAT;
             case Tag.AND:
                 this.eat(Tag.AND);
-                this.term();
-                break;
+                Types t3 = this.term();
+                if(!(t == t3 && (t == Types.BOOLEAN)))
+                    throw new SemanticException(t3, Types.NUMERIC);
+                return Types.BOOLEAN;
             // term-aux -> lambda
             default:
-                break;
+                return t;
         }
     }
 
-    private void factorA(){
+    private Types factorA() throws Exception{
         switch(this.t.tag){
             // factor-a -> ! factor
             case Tag.NOT:
                 this.eat(Tag.NOT);
-                this.factor();
-                break;
+                Types t1 = this.factor();
+                if(!t1.equals(Types.BOOLEAN))
+                    throw new SemanticException(t1, Types.BOOLEAN);
+                return t1;
             // factor-a -> - factor
             case Tag.SUB:
                 this.eat(Tag.SUB);
-                this.factor();
-                break;
+                Types t2 = this.factor();
+                if(!t2.equals(Types.INT) || !t2.equals(Types.FLOAT))
+                    throw new SemanticException(t2, Types.NUMERIC);
+                return t2;
             // factor-a -> factor
             case Tag.ID:
             case Tag.NUMERIC:
             case Tag.LITERAL:
             case Tag.OPEN_PAR:
-                this.factor();
-                break;
+                return this.factor();
             default:
                 this.error();
+                return Types.ERROR;
         }
     }
 
-    private void factor(){
+    private Types factor() throws Exception{
         switch(this.t.tag){
             // factor -> identifier
             case Tag.ID:
+                Types t1 = this.ST.get(this.t.getLexeme()).type;
                 this.eat(Tag.ID);
-                break;
+                return t1;
             // factor -> constant -> integer_const | numeric_const | literal
             case Tag.NUMERIC:
+                String num = this.t.getValue();
+                Types t2 = Types.ERROR;
+                try {
+                    Integer.parseInt(num);
+                    t2 = Types.INT;
+                } catch(NumberFormatException e) {
+                    // Not int
+                }
+                // Check if float
+                try {
+                    Float.parseFloat(num);
+                    t2 = Types.FLOAT;
+                } catch(NumberFormatException e) {
+                    // Not float
+                }
                 this.eat(Tag.NUMERIC);
-                break;
+                return t2;
             case Tag.LITERAL:
                 this.eat(Tag.LITERAL);
-                break;
+                return Types.STRING;
             // factor -> ( expression )
             case Tag.OPEN_PAR:
                 this.eat(Tag.OPEN_PAR);
-                this.expression();
+                Types t3 = this.expression();
                 this.eat(Tag.CLOSE_PAR);
-                break;
+                return t3;
             default:
                 this.error();
+                return Types.ERROR;
         }
     }
 
-    private void declList(){
+    private void declList() throws Exception{
         // decl-list -> decl {decl}
         do{
             this.decl();
@@ -330,43 +377,47 @@ public class Syntatic {
                 this.t.tag == Tag.STRING);
     }
 
-    private void decl(){
+    private void decl() throws Exception{
         // decl -> type ident-list ;
-        this.type();
-        this.identList();
+        Types t = this.type();
+        this.identList(t);
         this.eat(Tag.SEMICOLON);
     }
 
-    private void type(){
+    private Types type() throws Exception{
         switch(this.t.tag){
             // type -> int
             case Tag.INT:
                 this.eat(Tag.INT);
-                break;
+                return Types.INT;
             // type -> float
             case Tag.FLOAT:
                 this.eat(Tag.FLOAT);
-                break;
+                return Types.FLOAT;
             // type -> string
             case Tag.STRING:
                 this.eat(Tag.STRING);
-                break;
+                return Types.STRING;
             default:
                 this.error();
-                break;
+                return Types.ERROR;
         }
     }
 
-    private void identList(){
+    private void identList(Types t) throws Exception{
         // ident-list -> identifier {, identifier}
+        if(this.ST.hasSymbol(this.t.getLexeme()))
+            throw new SemanticException("Variable declared twice");
         this.eat(Tag.ID);
         while(this.t.tag == Tag.COLON){
             this.eat(Tag.COLON);
+            if(this.ST.hasSymbol(this.t.getLexeme()))
+                throw new SemanticException("Variable declared twice");
             this.eat(Tag.ID);
         }
     }
 
-    public void executeSyntatical(){
+    public void executeSyntatical() throws Exception{
 
         this.program();
 

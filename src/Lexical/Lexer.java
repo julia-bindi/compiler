@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import SymbolTable.SymbolTable;
+import SymbolTable.Types;
 
 public class Lexer {
 
@@ -212,7 +213,7 @@ public class Lexer {
                             endLine = this.line;
                         }
                         this.unRead();
-                        return ST.put(new Id(Tag.ID, lexem));
+                        return ST.put(new Id(Tag.ID, lexem, Types.VOID));
                     }else if(Character.isDigit(this.ch)){ // Probable Int or Float
                         String value = "" + this.ch;
                         this.nextChar();

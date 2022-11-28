@@ -13,4 +13,8 @@ public class Numeric extends Token {
         return "<" + translatedTag + ", " + this.value + ">";
     }
 
+    public String getValue(){
+        return this.value;
+    }
+
 }

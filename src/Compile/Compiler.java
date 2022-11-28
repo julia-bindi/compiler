@@ -25,7 +25,7 @@ public class Compiler {
         String projectPath = new File("").getAbsolutePath();
         this.lexical = new Lexer(projectPath.concat("/tests/" + file), ST);
 
-        this.syntatical = new Syntatic(this.lexical);
+        this.syntatical = new Syntatic(this.lexical, this.ST);
         
     }
 
@@ -49,8 +49,9 @@ public class Compiler {
         }else if(option=="syntatical"){
             try {
                 this.syntatical.executeSyntatical();
-            } catch (Error e) {
+            } catch (Exception e) {
                 System.out.println("Erro na linha " + this.lexical.line);
+                System.out.println(e.getMessage());
             }
             if(this.syntatical.error)
                 System.out.println("Análise falhou, erro encontrado");
