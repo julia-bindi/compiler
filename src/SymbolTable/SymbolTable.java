@@ -57,8 +57,13 @@ public class SymbolTable {
         return false;
     }
 
-    public void remove() {
-
+    public void changeType(String lexeme, Types type) {
+        if(hasSymbol(lexeme)){
+            Id id = this.get(lexeme);
+            this.table.remove(id);
+            id.type = type;
+            this.put(id);
+        }
     }
 
     public void printTable() {

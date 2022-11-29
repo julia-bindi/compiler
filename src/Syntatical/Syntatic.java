@@ -406,13 +406,15 @@ public class Syntatic {
 
     private void identList(Types t) throws Exception{
         // ident-list -> identifier {, identifier}
-        if(this.ST.hasSymbol(this.t.getLexeme()))
+        if(this.ST.get(this.t.getLexeme()).type != Types.VOID)
             throw new SemanticException("Variable declared twice");
+        this.ST.changeType(this.t.getLexeme(), t);
         this.eat(Tag.ID);
         while(this.t.tag == Tag.COLON){
             this.eat(Tag.COLON);
-            if(this.ST.hasSymbol(this.t.getLexeme()))
+            if(this.ST.get(this.t.getLexeme()).type != Types.VOID)
                 throw new SemanticException("Variable declared twice");
+            this.ST.changeType(this.t.getLexeme(), t);
             this.eat(Tag.ID);
         }
     }
