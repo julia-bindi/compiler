@@ -117,9 +117,14 @@ public class Syntatic {
 
     private void assignStmt() throws Exception{
         // assign-stmt -> identifier = simple-expr
+        Types t1 = this.ST.get(this.t.getLexeme()).type;
+        if(t1 == Types.VOID)
+            throw new SemanticException("Variable not declared");
         this.eat(Tag.ID);
         this.eat(Tag.ASSIGN);
-        this.simpleExpr();
+        Types t2 = this.simpleExpr();
+        if(t1 != t2)
+            throw new SemanticException(t1, t2);
     }
 
     private void ifStmt() throws Exception{
@@ -160,6 +165,8 @@ public class Syntatic {
         // read-stmt -> scan ( identifier )
         this.eat(Tag.SCAN);
         this.eat(Tag.OPEN_PAR);
+        if(this.ST.get(this.t.getLexeme()).type == Types.VOID)
+            throw new SemanticException("Variable not declared");
         this.eat(Tag.ID);
         this.eat(Tag.CLOSE_PAR);
     }
@@ -237,12 +244,12 @@ public class Syntatic {
         // simple-expr-aux -> [addop simple-expr]
         switch(this.t.tag){
             case Tag.ADD:
-                if(!(t.equals(Types.INT) || t.equals(Types.FLOAT)))
-                    throw new SemanticException(t, Types.NUMERIC);
+                if(!(t.equals(Types.INT) || t.equals(Types.FLOAT) || t.equals(Types.STRING)))
+                    throw new SemanticException("Additions need to be Int, Float or String.");
                 this.eat(Tag.ADD);
                 Types t1 = this.simpleExpr();
-                if(!(t1.equals(Types.INT) || t1.equals(Types.FLOAT)))
-                    throw new SemanticException(t, Types.NUMERIC);
+                if(!(t1.equals(Types.INT) || t1.equals(Types.FLOAT) || t1.equals(Types.STRING)))
+                    throw new SemanticException("Additions need to be Int, Float or String.");
                 return t1;
             case Tag.SUB:
                 if(!(t.equals(Types.INT) || t.equals(Types.FLOAT)))
@@ -332,6 +339,8 @@ public class Syntatic {
             // factor -> identifier
             case Tag.ID:
                 Types t1 = this.ST.get(this.t.getLexeme()).type;
+                if(this.ST.get(this.t.getLexeme()).type == Types.VOID)
+                    throw new SemanticException("Variable not declared");
                 this.eat(Tag.ID);
                 return t1;
             // factor -> constant -> integer_const | numeric_const | literal
@@ -341,15 +350,15 @@ public class Syntatic {
                 try {
                     Integer.parseInt(num);
                     t2 = Types.INT;
-                } catch(NumberFormatException e) {
+                } catch(NumberFormatException e1) {
                     // Not int
-                }
-                // Check if float
-                try {
-                    Float.parseFloat(num);
-                    t2 = Types.FLOAT;
-                } catch(NumberFormatException e) {
-                    // Not float
+                    // Check if float
+                    try {
+                        Float.parseFloat(num);
+                        t2 = Types.FLOAT;
+                    } catch(NumberFormatException e2) {
+                        // Not float
+                    }
                 }
                 this.eat(Tag.NUMERIC);
                 return t2;

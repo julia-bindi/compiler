@@ -52,6 +52,7 @@ public class Compiler {
             } catch (Exception e) {
                 System.out.println("Erro na linha " + this.lexical.line);
                 System.out.println(e.getMessage());
+                this.syntatical.error = true;
             }
             if(this.syntatical.error)
                 System.out.println("Análise falhou, erro encontrado");
