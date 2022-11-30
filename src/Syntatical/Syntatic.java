@@ -119,7 +119,7 @@ public class Syntatic {
         // assign-stmt -> identifier = simple-expr
         Types t1 = this.ST.get(this.t.getLexeme()).type;
         if(t1 == Types.VOID)
-            throw new SemanticException("Variable not declared");
+            throw new SemanticException("Variavel nao declarada.");
         this.eat(Tag.ID);
         this.eat(Tag.ASSIGN);
         Types t2 = this.simpleExpr();
@@ -166,7 +166,7 @@ public class Syntatic {
         this.eat(Tag.SCAN);
         this.eat(Tag.OPEN_PAR);
         if(this.ST.get(this.t.getLexeme()).type == Types.VOID)
-            throw new SemanticException("Variable not declared");
+            throw new SemanticException("Variavel nao declarada.");
         this.eat(Tag.ID);
         this.eat(Tag.CLOSE_PAR);
     }
@@ -245,11 +245,11 @@ public class Syntatic {
         switch(this.t.tag){
             case Tag.ADD:
                 if(!(t.equals(Types.INT) || t.equals(Types.FLOAT) || t.equals(Types.STRING)))
-                    throw new SemanticException("Additions need to be Int, Float or String.");
+                    throw new SemanticException("Adicoes precisam ser Int, Float ou String.");
                 this.eat(Tag.ADD);
                 Types t1 = this.simpleExpr();
                 if(!(t1.equals(Types.INT) || t1.equals(Types.FLOAT) || t1.equals(Types.STRING)))
-                    throw new SemanticException("Additions need to be Int, Float or String.");
+                    throw new SemanticException("Adicoes precisam ser Int, Float ou String.");
                 return t1;
             case Tag.SUB:
                 if(!(t.equals(Types.INT) || t.equals(Types.FLOAT)))
@@ -340,7 +340,7 @@ public class Syntatic {
             case Tag.ID:
                 Types t1 = this.ST.get(this.t.getLexeme()).type;
                 if(this.ST.get(this.t.getLexeme()).type == Types.VOID)
-                    throw new SemanticException("Variable not declared");
+                    throw new SemanticException("Variavel nao declarada.");
                 this.eat(Tag.ID);
                 return t1;
             // factor -> constant -> integer_const | numeric_const | literal
@@ -416,13 +416,13 @@ public class Syntatic {
     private void identList(Types t) throws Exception{
         // ident-list -> identifier {, identifier}
         if(this.ST.get(this.t.getLexeme()).type != Types.VOID)
-            throw new SemanticException("Variable declared twice");
+            throw new SemanticException("Variavel declarada duas vezes.");
         this.ST.changeType(this.t.getLexeme(), t);
         this.eat(Tag.ID);
         while(this.t.tag == Tag.COLON){
             this.eat(Tag.COLON);
             if(this.ST.get(this.t.getLexeme()).type != Types.VOID)
-                throw new SemanticException("Variable declared twice");
+                throw new SemanticException("Variavel declarada duas vezes.");
             this.ST.changeType(this.t.getLexeme(), t);
             this.eat(Tag.ID);
         }

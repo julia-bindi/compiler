@@ -57,7 +57,7 @@ public class Compiler {
             if(this.syntatical.error)
                 System.out.println("Análise falhou, erro encontrado");
             else
-                System.out.println("Análise léxica concluída!");
+                System.out.println("Análise concluída!");
         }
 
     }
